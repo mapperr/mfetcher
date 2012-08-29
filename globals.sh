@@ -1,13 +1,25 @@
 #! /bin/bash
 
-DEBUG=0
+DEBUG=1
+LOGLVL=1
 CURL_OPTS="-s"
 #CURL_OPTS=""
 
+MAX_PROC=8
+
 mytrace()
 {
-	if [ "$DEBUG" -eq 0 ]
+	if [ "$LOGLVL" -eq 0 ]
 	then
-		echo "$1"
+		MYTS=$(date '+%H:%m:%S')
+		printf "\nTRACE - $MYTS - $1"
+	fi
+}
+
+myinfo()
+{
+	if [ "$LOGLVL" -eq 1 ]
+	then
+		printf "\nINFO - $1"
 	fi
 }
