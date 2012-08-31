@@ -1,9 +1,0 @@
-#! /bin/bash
-
-MYP=0
-
-while [ $MYP -eq 0 ]
-do
-	killall curl
-	MYP=$?
-done
