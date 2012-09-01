@@ -21,7 +21,7 @@ then
 fi
 
 SUMMARY_PAGE_URL="$BASE_URL/$FORMATTED_NAME/"
-SUMMARY_PAGE_FILE="mfetcher-summary"
+SUMMARY_PAGE_FILE="$FORMATTED_NAME/mfetcher-summary"
 
 mytrace "summary page url: $SUMMARY_PAGE_URL"
 
@@ -34,7 +34,7 @@ REGEX=$(printf "$SUMMARY_PAGE_URL"; printf "[v0-9/]*c[0-9\.]*/")
 
 mytrace "regex to find chapters urls: $REGEX"
 
-CHAPTER_URLS_FILE="mfetcher-chapters"
+CHAPTER_URLS_FILE="$FORMATTED_NAME/mfetcher-chapters"
 
 cat "$SUMMARY_PAGE_FILE" | grep -o -E "$REGEX" > "$CHAPTER_URLS_FILE"
 
@@ -76,3 +76,5 @@ do
 	
 	mytrace "spawned new process: $NEW_PROC"
 done
+
+wait
