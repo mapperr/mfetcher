@@ -20,7 +20,7 @@ fi
 
 CHAPTER_NUMBER=$(printf "$URL" | grep -o -E "/c[0-9\.]*" | tr -d "/")
 
-myinfo "fetching chapter $CHAPTER_NUMBER"
+myinfo "fetching chapter $CHAPTER_NUMBER ..."
 
 while [ "$URL_EXISTS" -eq "0" ]
 do
@@ -59,4 +59,4 @@ do
 	COUNTER=$(expr $COUNTER + 1)
 done
 
-myinfo "fetched chapter $CHAPTER_NUMBER"
+myinfo "... chapter $CHAPTER_NUMBER fetched!"
