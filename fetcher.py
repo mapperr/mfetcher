@@ -7,13 +7,17 @@ from bs4 import BeautifulSoup
 import urllib
 import re
 
-def fetchChapter(pageUrl,args,page=1):
+urlbase = "http://www.mangahere.com/manga/"
+
+def fetchChapter(pageUrl,page=1):
 	print "fetching page "+ str(page)
 	pageHtml = urllib2.urlopen(pageUrl).read()
 	soup = BeautifulSoup(pageHtml)
 	linkImage = soup.find(id="image").get("src")
 	formattedPage = str(page).zfill(3)
-	imageFilename = args['manganame']+"_v"+args['volume']+"_c"+args['chapter']+"_p"+formattedPage+".jpg"
+	pageUrl = pageUrl.replace(urlbase,"").replace("/","_")
+	imageFilename = pageUrl + "_" + formattedPage + ".jpg"
+	#imageFilename = args.manganame + "_v" + args.volume + "_c" + args.chapter + "_p" + formattedPage + ".jpg"
 	if(not os.path.isfile(imageFilename)):
 		print "fetching image: " + linkImage
 		urllib.urlretrieve(linkImage, imageFilename)
@@ -21,21 +25,21 @@ def fetchChapter(pageUrl,args,page=1):
 			print "image "+imageFilename+" already exists"
 	nexturl = soup.find(class_="next_page").get("href")
 	if(nexturl.find("http") is not -1):
-		fetchChapter(nexturl,args,(page+1))
+		fetchChapter(nexturl,(page+1))
 
-
-urlbase = "http://www.mangahere.com/manga/"
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-m','--manganame', help='manga name', required=True)
+parser.add_argument('manganame', type=str, help='manga name')
 parser.add_argument('-v','--volume', help='volume number', required=False)
 parser.add_argument('-c','--chapter', help='chapter number', required=False)
+parser.add_argument('-l','--list', help='list chapters', required=False, action="store_true")
+parser.add_argument('-f','--fetchall', help='fetch all the chapters', required=False, action="store_true")
 
-args = vars(parser.parse_args())
+args = parser.parse_args()
 
-url = urlbase + args['manganame']
+url = urlbase + args.manganame
 
-print "fetching summary for " + args['manganame']
+print "fetching summary for " + args.manganame
 
 result = urllib2.urlopen(url).read()
 
@@ -46,12 +50,36 @@ chapterUrls = []
 for liNode in detailNode.find('ul').find_all('li') :
 	chapterUrls.append(liNode.find('a').get('href'))
 
-if(args['volume'] is not None and args['chapter'] is not None):
-	p = re.compile("v"+args['volume']+"/c"+args['chapter'])
+if(args.chapter is not None or args.volume is not None) :
+	volumeCompiledPattern = None
+	chapterCompiledPattern = None
+	mV = None
+	mC = None
+	if args.chapter is not None :
+		chapterPattern = "c" + args.chapter
+		chapterCompiledPattern = re.compile(chapterPattern)
+	if args.volume is not None :
+		volumePattern = "v" + args.volume
+		volumeCompiledPattern = re.compile(volumePattern)
 	for chapterUrl in chapterUrls :
-		m = p.search(chapterUrl)
-		if(m is not None):
+		if volumeCompiledPattern is not None:
+			mV = volumeCompiledPattern.search(chapterUrl)
+		if chapterCompiledPattern is not None:
+			mC = chapterCompiledPattern.search(chapterUrl)
+		if mV is not None or mC is not None :
 			print "matched chapter: " + chapterUrl
-			fetchChapter(chapterUrl,args)
+			fetchChapter(chapterUrl)
 else:
-	print chapterUrls
+	if args.list :
+		print "chapter list:"
+		i = len(chapterUrls) - 1
+		while i >= 0 :
+			print chapterUrls[i]
+			i -= 1
+	elif args.fetchall :
+		i = len(chapterUrls) - 1
+		while i >= 0 :
+			fetchChapter(chapterUrls[i])
+			i -= 1
+	else:
+		print "last chapter:" + chapterUrls[0]
