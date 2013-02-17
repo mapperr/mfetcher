@@ -61,7 +61,7 @@ if(args.chapter is not None or args.volume is not None) :
 	if args.volume is not None :
 		volumePattern = "v" + args.volume
 		volumeCompiledPattern = re.compile(volumePattern)
-	for chapterUrl in chapterUrls :
+	for chapterUrl in reversed(chapterUrls) :
 		if volumeCompiledPattern is not None:
 			mV = volumeCompiledPattern.search(chapterUrl)
 		if chapterCompiledPattern is not None:
@@ -72,14 +72,10 @@ if(args.chapter is not None or args.volume is not None) :
 else:
 	if args.list :
 		print "chapter list:"
-		i = len(chapterUrls) - 1
-		while i >= 0 :
-			print chapterUrls[i]
-			i -= 1
+		for chapterUrl in reversed(chapterUrls) :
+			print chapterUrl
 	elif args.fetchall :
-		i = len(chapterUrls) - 1
-		while i >= 0 :
-			fetchChapter(chapterUrls[i])
-			i -= 1
+		for chapterUrl in reversed(chapterUrls) :
+			fetchChapter(chapterUrl)
 	else:
 		print "last chapter:" + chapterUrls[0]
