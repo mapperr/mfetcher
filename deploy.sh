@@ -1,7 +1,7 @@
 #! /bin/sh
 
 DEPLOYDIR="/root/bin"
-FILEARRAY="fetcher.py bulkrename.sh"
+FILEARRAY="fetcher.py"
 
 case $1 in
 	"deploy")

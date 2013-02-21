@@ -17,12 +17,13 @@ def fetchChapter(pageUrl,page=1):
 	formattedPage = str(page).zfill(3)
 	pageUrl = pageUrl.replace(urlbase,"").replace("/","_")
 	imageFilename = pageUrl + "_" + formattedPage + ".jpg"
-	#imageFilename = args.manganame + "_v" + args.volume + "_c" + args.chapter + "_p" + formattedPage + ".jpg"
+	imageFilename = re.sub("_[0-9]*\.html","",imageFilename)
+	imageFilename = re.sub("__","_",imageFilename)
 	if(not os.path.isfile(imageFilename)):
-		print "fetching image: " + linkImage
+		print "fetching page " + str(page)
 		urllib.urlretrieve(linkImage, imageFilename)
 	else:
-			print "image "+imageFilename+" already exists"
+			print "page " +str(page)+" already exists"
 	nexturl = soup.find(class_="next_page").get("href")
 	if(nexturl.find("http") is not -1):
 		fetchChapter(nexturl,(page+1))
