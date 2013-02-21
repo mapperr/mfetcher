@@ -10,7 +10,6 @@ import re
 urlbase = "http://www.mangahere.com/manga/"
 
 def fetchChapter(pageUrl,page=1):
-	print "fetching page "+ str(page)
 	pageHtml = urllib2.urlopen(pageUrl).read()
 	soup = BeautifulSoup(pageHtml)
 	linkImage = soup.find(id="image").get("src")
