@@ -1,4 +1,4 @@
 mfetcher
 ========
 
-Bash scripts to fetch mangas from (ideally) various sites.
+Scripts to interact with mangaeden rest api
