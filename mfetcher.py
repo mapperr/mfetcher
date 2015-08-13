@@ -12,6 +12,10 @@ logger.addHandler(logging.StreamHandler())
 database_file = "mangadb.json"
 base_mangaeden_url = "https://www.mangaeden.com/api"
 base_images_url = "https://cdn.mangaeden.com/mangasimg"
+loginUrl = "https://www.mangaeden.com/ajax/login"
+# e.g.: https://www.mangaeden.com/ajax/login/?username=X&password=Y
+logoutUrl = "https://www.mangaeden.com/ajax/logout/"
+myMangaUrl = "https://www.mangaeden.com/api/mymanga"
 
 def updateMangaDb():
     r = requests.get(base_mangaeden_url + "/list/0")
