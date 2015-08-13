@@ -13,7 +13,7 @@ database_file = "mangadb.json"
 base_mangaeden_url = "https://www.mangaeden.com/api"
 base_images_url = "https://cdn.mangaeden.com/mangasimg"
 
-def update_manga_db():
+def updateMangaDb():
     r = requests.get(base_mangaeden_url + "/list/0")
     f = open(database_file,"w")
     f.write(r.text)

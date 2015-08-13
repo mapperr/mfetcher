@@ -26,7 +26,7 @@ try:
         page = sys.argv[4]
 
     if command == "update":
-        mfetcher.update_manga_db()
+        mfetcher.updateMangaDb()
         sys.exit(0)
 
 
