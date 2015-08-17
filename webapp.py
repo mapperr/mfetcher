@@ -7,12 +7,13 @@ mfetcher.updateMangaDb()
 @route('/')
 def list():
     mfetcher.updateMangaDb()
+    db = mfetcher.database["manga"]
     templatePage = '''
         <html>
             <head>
             </head>
             <body>
-                % for manga in mfetcher.database["manga"]:
+                % for manga in db:
                     <a href="{{manga["a"]}}">{{manga["t"]}}</a><br />
                 % end
                 <br />
