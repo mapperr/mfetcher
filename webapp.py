@@ -1,5 +1,6 @@
 #! /usr/bin/python
 from bottle import route, run, template
+import random
 import mfetcher
 
 mfetcher.updateMangaDb()
@@ -7,11 +8,12 @@ mfetcher.updateMangaDb()
 @route('/')
 def list():
     mfetcher.updateMangaDb()
+    entries = random.sample(mfetcher.database,40)
     templatePage = '''
         <html>
             <head>
             </head>
-            <body>
+            <body style="font-size:24px;font-family: sans;">
                 % for manga in db:
                     <a href="{{manga["a"]}}">{{manga["t"]}}</a><br />
                 % end
@@ -21,7 +23,7 @@ def list():
             </body>
         </html>
     '''
-    return template(templatePage, db=mfetcher.database["manga"])
+    return template(templatePage, db=entries)
 
 @route('/<manga>')
 @route('/<manga>/<chapter>')

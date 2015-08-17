@@ -25,6 +25,7 @@ def updateMangaDb():
     global database
     database = r.json()
 
+# TODO: rewrite using other functions
 def fetch(manga_name, chapter):
     manga_id = None
 
