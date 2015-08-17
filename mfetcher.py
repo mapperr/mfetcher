@@ -5,11 +5,14 @@ import requests
 import json
 import os
 
+database = None
+mangasInfo = {}
+chaptersInfo = {}
+
 logger = logging.getLogger("mfetcher")
 logger.addHandler(logging.StreamHandler())
 # logger.setLevel("DEBUG")
 
-database_file = "mangadb.json"
 base_mangaeden_url = "https://www.mangaeden.com/api"
 base_images_url = "https://cdn.mangaeden.com/mangasimg"
 loginUrl = "https://www.mangaeden.com/ajax/login"
@@ -19,17 +22,13 @@ myMangaUrl = "https://www.mangaeden.com/api/mymanga"
 
 def updateMangaDb():
     r = requests.get(base_mangaeden_url + "/list/0")
-    f = open(database_file,"w")
-    f.write(r.text)
-    f.close()
+    global database
+    database = r.json()
 
 def fetch(manga_name, chapter):
-    with open(database_file) as dbfile:
-        data = json.load(dbfile)
-
     manga_id = None
 
-    for manga in data["manga"]:
+    for manga in database["manga"]:
         if manga["a"] == manga_name:
             manga_id = manga["i"]
             break
@@ -77,10 +76,8 @@ def fetch(manga_name, chapter):
 
 def getMangaId(mangaName):
     logger.info("getting manga_id of ["+mangaName+"] from local database")
-    with open(database_file) as dbfile:
-        data = json.load(dbfile)
     manga_id = None
-    for manga in data["manga"]:
+    for manga in database["manga"]:
         if manga["a"] == mangaName:
             manga_id = manga["i"]
             logger.debug("found manga_id ["+manga_id+"]")
@@ -88,8 +85,12 @@ def getMangaId(mangaName):
     return None
 
 def getChapterId(mangaId, chapterNumber):
-    r = requests.get(base_mangaeden_url + "/manga/" + mangaId)
-    manga_data = r.json()
+    global mangasInfo
+    if mangaId not in mangasInfo:
+        r = requests.get(base_mangaeden_url + "/manga/" + mangaId)
+        manga_data = r.json()
+        mangasInfo[mangaId] = manga_data
+    manga_data = mangasInfo[mangaId]
     chapters_data = manga_data["chapters"]
     logger.info("getting chapter ["+str(chapterNumber)+"]")
     chapter_id = None
@@ -104,8 +105,12 @@ def getChapterId(mangaId, chapterNumber):
 
 def getImageUrl(chapterId, pageNumber):
     logger.info("getting page ["+str(pageNumber)+"]")
-    r = requests.get(base_mangaeden_url + "/chapter/" + chapterId)
-    images_data = r.json()["images"]
+    global chaptersInfo
+    if chapterId not in chaptersInfo:
+        r = requests.get(base_mangaeden_url + "/chapter/" + chapterId)
+        chapter_data = r.json()
+        chaptersInfo[chapterId] = chapter_data
+    images_data = chaptersInfo[chapterId]["images"]
     for image_data in images_data:
         image_number = image_data[0]
         logger.debug("checking image_number ["+str(image_number)+"]")
