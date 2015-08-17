@@ -4,14 +4,14 @@ import mfetcher
 
 mfetcher.updateMangaDb()
 
-@route('/i/<manga>')
-@route('/i/<manga>/<chapter>')
-@route('/i/<manga>/<chapter>/<page>')
+@route('/<manga>')
+@route('/<manga>/<chapter>')
+@route('/<manga>/<chapter>/<page>')
 def image(manga,chapter=1,page=0):
     nextPage = int(page) + 1
     nextChapter = int(chapter) + 1
-    nextPageUrl = '/i/'+manga+'/'+str(chapter)+'/'+str(nextPage)
-    nextChapterUrl = '/i/'+manga+'/'+str(nextChapter)+'/0'
+    nextPageUrl = '/'+manga+'/'+str(chapter)+'/'+str(nextPage)
+    nextChapterUrl = '/'+manga+'/'+str(nextChapter)+'/0'
     imgUrl = mfetcher.get_page_url_from_coordinates(manga,chapter,page)
     nextImgUrl = mfetcher.get_page_url_from_coordinates(manga,chapter,nextPage)
 
@@ -35,4 +35,4 @@ def image(manga,chapter=1,page=0):
 
     return template(templatePage,nextPageUrl=nextUrl, imgUrl=imgUrl)
 
-run(host='0.0.0.0', port=8080)
+run(host='0.0.0.0', port=80)
