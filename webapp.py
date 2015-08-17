@@ -8,7 +8,7 @@ mfetcher.updateMangaDb()
 @route('/')
 def list():
     mfetcher.updateMangaDb()
-    entries = random.sample(mfetcher.database,40)
+    entries = random.sample(mfetcher.database["manga"],40)
     templatePage = '''
         <html>
             <head>
