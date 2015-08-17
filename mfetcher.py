@@ -91,19 +91,19 @@ def getChapterId(mangaId, chapterNumber):
     r = requests.get(base_mangaeden_url + "/manga/" + mangaId)
     manga_data = r.json()
     chapters_data = manga_data["chapters"]
-    logger.info("getting chapter ["+chapterNumber+"]")
+    logger.info("getting chapter ["+str(chapterNumber)+"]")
     chapter_id = None
     for chapter_data in chapters_data:
         chapter_index = chapter_data[0]
         logger.debug("checking chapter_index ["+str(chapter_index)+"]")
         if chapter_index == int(chapterNumber):
             chapter_id = chapter_data[3]
-            logger.debug("found chapter_id ["+chapter_id+"]")
+            logger.debug("found chapter_id ["+str(chapter_id)+"]")
             return chapter_id
     return None
 
 def getImageUrl(chapterId, pageNumber):
-    logger.info("getting page ["+pageNumber+"]")
+    logger.info("getting page ["+str(pageNumber)+"]")
     r = requests.get(base_mangaeden_url + "/chapter/" + chapterId)
     images_data = r.json()["images"]
     for image_data in images_data:
