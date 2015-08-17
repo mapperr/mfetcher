@@ -7,7 +7,6 @@ mfetcher.updateMangaDb()
 @route('/')
 def list():
     mfetcher.updateMangaDb()
-    db = mfetcher.database["manga"]
     templatePage = '''
         <html>
             <head>
@@ -22,7 +21,7 @@ def list():
             </body>
         </html>
     '''
-    return template(templatePage)
+    return template(templatePage, db=mfetcher.database["manga"])
 
 @route('/<manga>')
 @route('/<manga>/<chapter>')
