@@ -87,6 +87,7 @@ def getMangaId(mangaName):
 def getChapterId(mangaId, chapterNumber):
     global mangasInfo
     if mangaId not in mangasInfo:
+        logger.debug("updating cache with manga infos")
         r = requests.get(base_mangaeden_url + "/manga/" + mangaId)
         manga_data = r.json()
         mangasInfo[mangaId] = manga_data
@@ -107,6 +108,7 @@ def getImageUrl(chapterId, pageNumber):
     logger.info("getting page ["+str(pageNumber)+"]")
     global chaptersInfo
     if chapterId not in chaptersInfo:
+        logger.debug("updating cache with chapter info")
         r = requests.get(base_mangaeden_url + "/chapter/" + chapterId)
         chapter_data = r.json()
         chaptersInfo[chapterId] = chapter_data

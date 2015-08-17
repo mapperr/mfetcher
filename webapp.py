@@ -4,6 +4,26 @@ import mfetcher
 
 mfetcher.updateMangaDb()
 
+@route('/')
+def list():
+    mfetcher.updateMangaDb()
+    templatePage = '''
+        <html>
+            <head>
+            </head>
+            <body>
+                <%
+                for manga in mfetcher.database["manga"]:
+                    print '<a href="manga["a"]">manga["t"]</a><br />'
+                %>
+                <br />
+                <br />
+                Powered by <a href="http://mangaeden.com">mangaeden.com</a>
+            </body>
+        </html>
+    '''
+    return template(templatePage)
+
 @route('/<manga>')
 @route('/<manga>/<chapter>')
 @route('/<manga>/<chapter>/<page>')
