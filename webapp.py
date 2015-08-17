@@ -12,10 +12,9 @@ def list():
             <head>
             </head>
             <body>
-                <%
-                for manga in mfetcher.database["manga"]:
-                    print '<a href="manga["a"]">manga["t"]</a><br />'
-                %>
+                % for manga in mfetcher.database["manga"]:
+                    <a href="{{manga["a"]}}">{{manga["t"]}}</a><br />
+                % end
                 <br />
                 <br />
                 Powered by <a href="http://mangaeden.com">mangaeden.com</a>
